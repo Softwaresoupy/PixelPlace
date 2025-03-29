@@ -2,11 +2,16 @@
 Project for CNIT 325
 
 ### CLASSES:
+
 **Server:**
+
 **DATABASE (Abstract)**
+
 -> Save ___ (in a file) by ID
 -> Get ____ 
+
 **Art Database**
+
 **User database**
 
 **User**
@@ -31,6 +36,9 @@ Project for CNIT 325
 **Art gallery show off yea :D GUI**
 **Login + Sign up GUI**
 
-Format idea
+Format idea:
+
 <img width="574" alt="image" src="https://github.com/user-attachments/assets/a507343b-5049-4620-90ff-5930121407cb" />
+
+
 
