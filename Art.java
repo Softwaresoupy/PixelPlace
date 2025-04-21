@@ -5,6 +5,15 @@ public class Art {
     private String artUser;
     private String artLocation; // file path to artwork
     private String artDescription;
+    private String galleryPlaceId;
+
+    public String getGalleryPlaceId() {
+        return galleryPlaceId;
+    }
+
+    public void setGalleryPlaceId(String placeId) {
+        this.galleryPlaceId = placeId;
+    }
     public Art(int id){
         artID = id;
     }
@@ -48,9 +57,15 @@ public class Art {
     this.artDescription = artDescription;
   }
 
-  public String toString(){
-      String artObjectString = "";
-      artObjectString = artID + "%*'" + artName + "%*'" + artTime + "%*'" + artUser + "%*'" + artLocation + "%*'" + artDescription;
-      return artObjectString;
-  }
+  public String toString() {
+        return String.join("%*'", 
+            String.valueOf(artID),
+            artName,
+            artTime,
+            artUser,
+            artLocation,
+            artDescription,
+            galleryPlaceId != null ? galleryPlaceId : "null"
+        );
+    }
 }
