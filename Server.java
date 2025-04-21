@@ -12,12 +12,10 @@ public class Server {
         // Start server
         this.port = port;
         this.ipAddress = ipAddress;
-        File f = new File("sadfdasd");
+        File f = new File("userDatabaseFile.txt");
         users = new userDatabase(f);
-        users.populate();
-        f = new File("sadfdasd");
+        f = new File("artDatabaseFile.txt");
         arts = new artDatabase(f);
-        arts.populate();
     }
 
     public void startServer(){
@@ -28,6 +26,9 @@ public class Server {
     public static void main(String[] args){
         Server s = new Server(1111, "wdfsfa");
         s.startServer();
-
+        artDatabase mainAD = new artDatabase(new File("artDBFile.txt"));
+        mainAD.saveFile();
+        userDatabase mainUD = new userDatabase(new File("userDBFile.txt"));
+        mainUD.saveFile();
     }
 }

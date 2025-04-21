@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package canvasapplication;
 import java.awt.Color;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -14,13 +13,13 @@ import javax.swing.event.ChangeListener;
  * @author shrutiatitkar
  */
 public class CanvasGUI extends javax.swing.JFrame {
-    private DrawingCanvas drawingCanvas;
+    private canvasapplication.DrawingCanvas drawingCanvas;
     /**
      * Creates new form CanvasGUI
      */
     public CanvasGUI() {
         initComponents();
-        drawingCanvas = new DrawingCanvas();
+        drawingCanvas = new canvasapplication.DrawingCanvas();
         drawingCanvas.setBackground(Color.WHITE);
         Canvas.add(drawingCanvas);
         drawingCanvas.setBounds(Canvas.getBounds());

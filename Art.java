@@ -1,9 +1,13 @@
 public class Art {
+    private int artID;
     private String artName;
     private String artTime;
     private String artUser;
-    private String artLocation;
+    private String artLocation; // file path to artwork
     private String artDescription;
+    public Art(int id){
+        artID = id;
+    }
     
   public String getArtName() {
     return artName;
@@ -42,5 +46,11 @@ public class Art {
 
   public void setArtDescription(String artDescription) {
     this.artDescription = artDescription;
+  }
+
+  public String toString(){
+      String artObjectString = "";
+      artObjectString = artID + "%*'" + artName + "%*'" + artTime + "%*'" + artUser + "%*'" + artLocation + "%*'" + artDescription;
+      return artObjectString;
   }
 }

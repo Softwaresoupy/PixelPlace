@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package artgallery;
 
 /**
  *
@@ -16,8 +15,8 @@ import java.util.List;
 
 public class ArtGalleryGUI extends JFrame {
     private User currentUser;
-    private JList<Artwork> artworkList;
-    private DefaultListModel<Artwork> listModel;
+    private JList<Art> artworkList;
+    private DefaultListModel<Art> listModel;
 
     public ArtGalleryGUI(User user) {
         this.currentUser = user;
@@ -65,22 +64,33 @@ public class ArtGalleryGUI extends JFrame {
 
     private void loadUserArtworks() {
         listModel.clear();
-        for (Artwork artwork : currentUser.getUploadedArtworks()) {
+        for (Art artwork : currentUser.getUploadedArtworks()) {
             listModel.addElement(artwork);
         }
     }
 
-    private static class ArtworkListRenderer extends JLabel implements ListCellRenderer<Artwork> {
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                User user = new User("Username", "Password", "email");
+                new ArtGalleryGUI(user).setVisible(true);
+            }
+        });
+    }
+
+    private static class ArtworkListRenderer extends JLabel implements ListCellRenderer<Art> {
         public ArtworkListRenderer() {
             setOpaque(true);
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Artwork> list, Artwork artwork, 
+        public Component getListCellRendererComponent(JList<? extends Art> list, Art artwork,
                 int index, boolean isSelected, boolean cellHasFocus) {
             
-            setText(artwork.getTitle());
-            setIcon(new ImageIcon(artwork.getThumbnail()));
+            setText(artwork.getArtName());
+            setIcon(new ImageIcon(artwork.getArtLocation()));
+            // figure out way to have a thumbnail
             
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
