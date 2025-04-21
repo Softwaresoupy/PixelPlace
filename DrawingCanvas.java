@@ -4,11 +4,6 @@
  */
 package canvasapplication;
 
-/**
- *
- * @author shrutiatitkar
- */
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,9 +11,15 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class DrawingCanvas extends JPanel {
     private Color currentColor = Color.BLACK;
@@ -114,5 +115,34 @@ public class DrawingCanvas extends JPanel {
 
     public boolean isEraserSelected() {
         return isEraserSelected;
+    }
+     public BufferedImage getCanvasImage() {
+        BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = image.createGraphics();
+        this.paint(g2d);
+        g2d.dispose();
+        return image;
+    }
+
+    public void saveDrawing() {
+        BufferedImage image = getCanvasImage();
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Images", "png");
+        fileChooser.setFileFilter(filter);
+        int result = fileChooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".png")) {
+                filePath += ".png";
+                selectedFile = new File(filePath);
+            }
+            try {
+                ImageIO.write(image, "png", selectedFile);
+                System.out.println("Drawing saved to: " + selectedFile.getAbsolutePath());
+            } catch (IOException e) {
+                System.err.println("Error saving image: " + e.getMessage());
+            }
+        }
     }
 }
