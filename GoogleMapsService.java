@@ -1,3 +1,5 @@
+package artgallery;
+
 import com.google.gson.*;
 import java.io.*;
 import java.net.*;
@@ -23,6 +25,8 @@ public class GoogleMapsService {
 
         HttpResponse<String> response = HttpClient.newHttpClient()
             .send(request, HttpResponse.BodyHandlers.ofString());
+        
+        System.out.println("API response:\n" + response.body());
 
         return parsePlaceResponse(response.body());
     }
@@ -67,6 +71,17 @@ public class GoogleMapsService {
         @Override
         public String toString() {
             return name + " (" + address + ")";
+        }
+    }
+    
+    public static void main(String[] args) {
+        try {
+            List<GoogleMapsService.Place> places = GoogleMapsService.searchPlaces("restaurant", "restaurant");
+            for (GoogleMapsService.Place place : places) {
+                System.out.println(place);
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
