@@ -40,7 +40,6 @@ public class User implements Serializable {
     public List<User> getFollowing() { return following; }
     public void setFollowing(List something) {following = something;}
 
-    // 业务方法
     public void uploadArtwork(Art artwork) {
         uploadedArtworks.add(artwork);
     }
