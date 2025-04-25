@@ -1,13 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author caoziyu
- */
-
+package artgallery;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,8 +6,8 @@ import java.util.List;
 
 public class ArtGalleryGUI extends JFrame {
     private User currentUser;
-    private JList<Art> artworkList;
-    private DefaultListModel<Art> listModel;
+    private JList<Artwork> artworkList;
+    private DefaultListModel<Artwork> listModel;
 
     public ArtGalleryGUI(User user) {
         this.currentUser = user;
@@ -64,33 +55,22 @@ public class ArtGalleryGUI extends JFrame {
 
     private void loadUserArtworks() {
         listModel.clear();
-        for (Art artwork : currentUser.getUploadedArtworks()) {
+        for (Artwork artwork : currentUser.getUploadedArtworks()) {
             listModel.addElement(artwork);
         }
     }
 
-
-    public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                User user = new User("Username", "Password", "email");
-                new ArtGalleryGUI(user).setVisible(true);
-            }
-        });
-    }
-
-    private static class ArtworkListRenderer extends JLabel implements ListCellRenderer<Art> {
+    private static class ArtworkListRenderer extends JLabel implements ListCellRenderer<Artwork> {
         public ArtworkListRenderer() {
             setOpaque(true);
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Art> list, Art artwork,
+        public Component getListCellRendererComponent(JList<? extends Artwork> list, Artwork artwork, 
                 int index, boolean isSelected, boolean cellHasFocus) {
             
-            setText(artwork.getArtName());
-            setIcon(new ImageIcon(artwork.getArtLocation()));
-            // figure out way to have a thumbnail
+            setText(artwork.getTitle());
+            setIcon(new ImageIcon(artwork.getThumbnail()));
             
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
@@ -103,4 +83,24 @@ public class ArtGalleryGUI extends JFrame {
             return this;
         }
     }
+    
+    
+//    public static void main(String[] args) {
+//        User testUser = new User("ZiyuCao", "123456", "ziyu@example.com");
+//
+//        Artwork art1 = new Artwork("Dreamy Sunset", testUser);
+//        Artwork art2 = new Artwork("Colorful Night", testUser);
+//        Artwork art3 = new Artwork("Mystery Forest", testUser);
+//
+//        testUser.uploadArtwork(art1);
+//        testUser.uploadArtwork(art2);
+//        testUser.uploadArtwork(art3);
+//
+//        SwingUtilities.invokeLater(() -> {
+//            ArtGalleryGUI gui = new ArtGalleryGUI(testUser);
+//            gui.setVisible(true);
+//        });
+//    }
+
+
 }
