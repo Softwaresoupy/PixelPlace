@@ -10,14 +10,20 @@ import java.awt.event.ActionEvent;
 public class LoginGUI extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JPasswordField repasswordField;
     private LoginListener loginListener;
+
+    private LoginListener registerListener;
 
     public interface LoginListener {
         void onLogin(String username, String password);
         void onRegister();
     }
 
-    public LoginGUI() {
+    public LoginGUI(){
+        login();
+    }
+    public void login() {
         setTitle("PixelGallery - Login");
         setSize(350, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,8 +73,63 @@ public class LoginGUI extends JFrame {
         add(panel);
     }
 
+    public void registerGUI(){
+        setTitle("PixelGallery - register");
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(new JLabel("PixelPlace - Register", JLabel.CENTER), gbc);
+
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        panel.add(new JLabel("Username:"), gbc);
+
+        gbc.gridx = 1;
+        usernameField = new JTextField(15);
+        panel.add(usernameField, gbc);
+
+        gbc.gridy = 2;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Password:"), gbc);
+
+        gbc.gridx = 1;
+        passwordField = new JPasswordField(15);
+        panel.add(passwordField, gbc);
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Re-enter Password:"), gbc);
+
+        gbc.gridx = 1;
+        repasswordField = new JPasswordField(15);
+        panel.add(repasswordField, gbc);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+
+        JButton registerBtn = new JButton("Register");
+        registerBtn.addActionListener(e -> {
+            if (registerListener != null) registerListener.onRegister();
+        });
+
+        buttonPanel.add(registerBtn);
+
+        gbc.gridy = 4;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        panel.add(buttonPanel, gbc);
+
+        add(panel);
+    }
+
     public void setLoginListener(LoginListener listener) {
         this.loginListener = listener;
+    }
+
+    public void setRegisterListener(LoginListener listener) {
+        this.registerListener = listener;
     }
 
     private void performLogin(ActionEvent e) {
@@ -79,7 +140,7 @@ public class LoginGUI extends JFrame {
             JOptionPane.showMessageDialog(this, "Username and password cannot be empty!");
             return;
         }
-        
+
         if (loginListener != null) {
             loginListener.onLogin(username, password);
         }

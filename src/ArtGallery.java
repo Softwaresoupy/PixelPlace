@@ -3,33 +3,37 @@
 import javax.swing.*;
 
 public class ArtGallery {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             showLoginGUI();
-            
-            // showArtGalleryGUI(); 
         });
     }
+     */
 
-    private static void showLoginGUI() {
+    public void showLoginGUI() {
         LoginGUI loginGUI = new LoginGUI();
         loginGUI.setLoginListener(new LoginGUI.LoginListener() {
             @Override
             public void onLogin(String username, String password) {
-                JOptionPane.showMessageDialog(loginGUI, "Login succeed! " + username);
+                // if login is correct then
+                JOptionPane.showMessageDialog(loginGUI, "Login succeed: " + username);
                 loginGUI.dispose();
                 showArtGalleryGUI();
+
+                //else
+                JOptionPane.showMessageDialog(loginGUI, "Username and password combination not found!");
             }
             
             @Override
             public void onRegister() {
-                JOptionPane.showMessageDialog(loginGUI, "To log in...");
+                loginGUI.registerGUI();
+                //JOptionPane.showMessageDialog(loginGUI, "To log in...");
             }
         });
         loginGUI.setVisible(true);
     }
 
-    private static void showArtGalleryGUI() {
+    public void showArtGalleryGUI() {
         User testUser = new User("Test", "123", "test@pixelgallery.com");
         
         testUser.uploadArtwork(new Artwork("Sun", testUser));

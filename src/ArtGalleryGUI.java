@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class ArtGalleryGUI extends JFrame {
+public class ArtGalleryGUI extends JFrame implements ActionListener {
     private User currentUser;
     private JList<Artwork> artworkList;
     private DefaultListModel<Artwork> listModel;
+
+    JButton uploadBtn, paintBtn, createGalleryBtn;
 
     public ArtGalleryGUI(User user) {
         this.currentUser = user;
@@ -19,9 +23,14 @@ public class ArtGalleryGUI extends JFrame {
         toolBar.add(new JLabel("Welcome, " + user.getUsername()));
         toolBar.addSeparator();
         
-        JButton uploadBtn = new JButton("Upload Art");
-        JButton createGalleryBtn = new JButton("Create Gallery");
+        uploadBtn = new JButton("Upload Art");
+        uploadBtn.addActionListener(this);
+        paintBtn = new JButton("Paint");
+        paintBtn.addActionListener(this);
+        createGalleryBtn = new JButton("Create Gallery");
+
         toolBar.add(uploadBtn);
+        toolBar.add(paintBtn);
         toolBar.add(createGalleryBtn);
         
         mainPanel.add(toolBar, BorderLayout.NORTH);
@@ -55,6 +64,21 @@ public class ArtGalleryGUI extends JFrame {
         for (Artwork artwork : currentUser.getUploadedArtworks()) {
             listModel.addElement(artwork);
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == uploadBtn)
+        {
+            UploadGUI uGUI = new UploadGUI();
+            uGUI.show();
+        }
+        if (e.getSource() == paintBtn)
+        {
+            CanvasGUI cGui = new CanvasGUI();
+            cGui.show();
+        }
+
     }
 
     private static class ArtworkListRenderer extends JLabel implements ListCellRenderer<Artwork> {

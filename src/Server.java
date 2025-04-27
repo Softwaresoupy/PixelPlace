@@ -15,7 +15,7 @@ public class Server {
     userDatabase users;
     artDatabase arts;
 
-    public Server(int port, String ipAddress){
+    public Server(int port){
         // Start server
         this.port = port;
         this.ipAddress = ipAddress;
@@ -41,20 +41,6 @@ public class Server {
 
                     Scanner in = new Scanner(inStream);   //setup of input
                     PrintWriter out = new PrintWriter(outStream,true);  //sends output
-
-                    boolean done = false;
-
-                    while (!done && in.hasNextLine()) //while there are lines to read, for this connection
-                    {
-                        String lineIn = in.nextLine();
-                        System.out.println(lineIn.trim());
-
-                        out.println(lineIn);
-                        if (lineIn.trim().equals("BYE"))   //to kill the server, enter "BYE" from the client
-                        {
-                            done = true;
-                        }
-                    }
                 }
                 catch (Exception exc1){
                     exc1.printStackTrace();
@@ -68,7 +54,7 @@ public class Server {
     }
 
     public static void main(String[] args){
-        Server s = new Server(1111, "wdfsfa");
+        Server s = new Server(8189);
         s.startServer();
         artDatabase mainAD = new artDatabase(new File("artDBFile.txt"));
         mainAD.saveFile();
