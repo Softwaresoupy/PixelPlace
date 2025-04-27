@@ -1,7 +1,5 @@
 // Test main
 
-package artgallery;
-
 import javax.swing.*;
 
 public class ArtGallery {

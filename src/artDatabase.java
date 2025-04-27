@@ -11,6 +11,7 @@ public class artDatabase extends Database{
         artArray = new ArrayList<Art>();
         populate();
     }
+
     public void populate(){
         //read through file
         try{

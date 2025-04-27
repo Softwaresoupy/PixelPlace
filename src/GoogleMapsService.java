@@ -1,5 +1,3 @@
-package artgallery;
-
 import com.google.gson.*;
 import java.io.*;
 import java.net.*;

@@ -1,8 +1,5 @@
-package artgallery;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class ArtGalleryGUI extends JFrame {
     private User currentUser;
@@ -85,22 +82,22 @@ public class ArtGalleryGUI extends JFrame {
     }
     
     
-//    public static void main(String[] args) {
-//        User testUser = new User("ZiyuCao", "123456", "ziyu@example.com");
-//
-//        Artwork art1 = new Artwork("Dreamy Sunset", testUser);
-//        Artwork art2 = new Artwork("Colorful Night", testUser);
-//        Artwork art3 = new Artwork("Mystery Forest", testUser);
-//
-//        testUser.uploadArtwork(art1);
-//        testUser.uploadArtwork(art2);
-//        testUser.uploadArtwork(art3);
-//
-//        SwingUtilities.invokeLater(() -> {
-//            ArtGalleryGUI gui = new ArtGalleryGUI(testUser);
-//            gui.setVisible(true);
-//        });
-//    }
+    public static void main(String[] args) {
+        User testUser = new User("ZiyuCao", "123456", "ziyu@example.com");
+
+      Artwork art1 = new Artwork("Dreamy Sunset", testUser);
+        Artwork art2 = new Artwork("Colorful Night", testUser);
+        Artwork art3 = new Artwork("Mystery Forest", testUser);
+
+        testUser.uploadArtwork(art1);
+        testUser.uploadArtwork(art2);
+        testUser.uploadArtwork(art3);
+
+       SwingUtilities.invokeLater(() -> {
+            ArtGalleryGUI gui = new ArtGalleryGUI(testUser);
+           gui.setVisible(true);
+        });
+    }
 
 
 }

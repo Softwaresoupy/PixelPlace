@@ -1,5 +1,3 @@
-package artgallery;
-
 /**
  *
  * @author caoziyu

@@ -1,5 +1,3 @@
-package artgallery;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +8,8 @@ public class User implements Serializable {
     private String email;
     private List<Artwork> uploadedArtworks;
     private List<User> following;
+    private String [] followingString;
+    private String [] uploadedArtworksString;
 
     public User(String username, String password, String email) {
         this.username = username;
@@ -23,8 +23,14 @@ public class User implements Serializable {
     public String getPassword() { return password; }
     public String getEmail() { return email; }
     public List<Artwork> getUploadedArtworks() { return uploadedArtworks; }
-    public List<User> getFollowing() { return following; }
+    public void setUploadedArtworks(List<Artwork> uploadedArtworks) { this.uploadedArtworks = uploadedArtworks; }
 
+    public void setUploadedArtworksString (String [] artNames) { uploadedArtworksString = artNames;}
+    public String [] getUploadedArtworksString() { return uploadedArtworksString; }
+    public List<User> getFollowing() { return following; }
+    public void setFollowing(List<User> following) { this.following = following;}
+    public void setFollowingString (String [] usersNames) { followingString = usersNames;}
+    public String [] getFollowingString() { return followingString;}
     public void uploadArtwork(Artwork artwork) {
         uploadedArtworks.add(artwork);
     }
@@ -47,5 +53,11 @@ public class User implements Serializable {
     public int hashCode() {
         return username.hashCode();
     }
+
+    public String toString() {
+        String userString = username + "'*%" + password + "'*%" + email + "'*%";
+        return userString;
+    }
 }
+
 

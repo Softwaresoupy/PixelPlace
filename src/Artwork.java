@@ -1,5 +1,4 @@
 // TEST artwork class
-package artgallery;
 
 import java.awt.*;
 import java.util.*;
