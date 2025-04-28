@@ -38,7 +38,17 @@ public class Client {
     public void sendMessage(String message){
         System.out.println("Sending message '" + message + "'");
         pw.println(message);
+        if (message.equalsIgnoreCase("EXIT")){
+            try {
+                if (pw != null) pw.close();
+                if (in != null) in.close();
+                if (s != null && !s.isClosed()) s.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
+
 
     public void receiveMessage(){
         String serverMessage;

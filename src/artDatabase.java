@@ -8,7 +8,7 @@ public class artDatabase implements Database{
     public artDatabase(File f){
         artFile = f;
         artArray = new ArrayList<Art>();
-        //populate();
+        populate();
     }
 
     public void populate(){
@@ -22,21 +22,27 @@ public class artDatabase implements Database{
                 Art newArt = new Art();
                 id++;
                 String[] splitArtDesc = artObjectString.split("%");
-                newArt.setName(splitArtDesc[1]);
-                newArt.setArtTime(splitArtDesc[2]);
-                newArt.setArtUser(splitArtDesc[3]);
-                newArt.setArtLocation(splitArtDesc[4]);
+                newArt.setName(splitArtDesc[0]);
+                newArt.setArtTime(splitArtDesc[1]);
+                newArt.setArtUser(splitArtDesc[2]);
+                newArt.setArtLocation(splitArtDesc[3]);
                 newArt.setArtDescription(splitArtDesc[5]);
+                newArt.setArtFile(splitArtDesc[4]);
                 artArray.add(newArt);
                 artObjectString = br.readLine();
+                System.out.println("Art added to array: " + newArt.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void add(Object a) {
+    public void addy(Object a) {
         try {
+            System.out.println("adding to array: " + a.toString());
             artArray.add((Art) a);
+            for(Art aa : artArray){
+                System.out.println(aa);
+            }
             saveFile();
         } catch (Exception e){
             System.out.println("that's not an art object!");
@@ -52,11 +58,15 @@ public class artDatabase implements Database{
 
     public void saveFile() {
         try{
+            System.out.println("saving to file");
             FileWriter fw = new FileWriter(artFile);
             BufferedWriter bw = new BufferedWriter(fw);
             for (Art a : artArray){
                 bw.write(a.toString());
+                bw.newLine();
+                System.out.println("saved" + a.toString());
             }
+            bw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

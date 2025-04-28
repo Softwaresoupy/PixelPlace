@@ -35,16 +35,17 @@ public class ArtGallery {
         String password = splitArtDesc[1];
         String email = splitArtDesc[2];
         User newUser = new User(username, password, email);
-        showArtGalleryGUI(newUser);
+        showArtGalleryGUI(newUser, client);
     }
 
     public void incorrectLogin(){
         JOptionPane.showMessageDialog(loginGUI, "Username and password combination not found!");
     }
 
-    public void showArtGalleryGUI(User user) {
+    public void showArtGalleryGUI(User user, Client client) {
 
         ArtGalleryGUI galleryGUI = new ArtGalleryGUI(user, client);
+        System.out.println(client + "In showArtGalleryGUI GUI");
         galleryGUI.setVisible(true);
         galleryGUI.setLocationRelativeTo(null);
     }

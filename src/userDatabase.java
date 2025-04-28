@@ -24,9 +24,6 @@ public class userDatabase implements Database{
                     String password = splitArtDesc[1];
                     String email = splitArtDesc[2];
                     User newUser = new User(username, password, email);
-                    System.out.println(username);
-                    System.out.println(password);
-                    System.out.println(email);
                     /*userObjectString = br.readLine();
                     newUser.setUploadedArtworksString(userObjectString.split(","));
                     userObjectString = br.readLine();
@@ -44,7 +41,7 @@ public class userDatabase implements Database{
     public void stringToObjectMatch(){
 
     }
-    public void add(Object a) {
+    public void addy(Object a) {
         userArray.add((User) a);
         saveFile();
     }

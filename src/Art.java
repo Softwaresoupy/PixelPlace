@@ -60,6 +60,12 @@ public class Art {
     return artDescription;
   }
 
+  public String getArtFile(){return artFile;}
+
+    public void setArtFile(String string){
+        artFile = string;
+    }
+
   public void setArtDescription(String artDescription) {
     this.artDescription = artDescription;
   }
@@ -70,8 +76,8 @@ public class Art {
             artTime,
             artUser,
             artLocation,
-            artDescription,
-            galleryPlaceId != null ? galleryPlaceId : "null"
+            artFile,
+            artDescription
         );
     }
 }

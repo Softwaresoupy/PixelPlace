@@ -24,8 +24,9 @@ public class UploadGUI extends JFrame implements ActionListener {
     public static Client client;
     public static User user;
 
-    public UploadGUI(Client client, User user) {
-        this.client = client;
+    public UploadGUI(Client cllient, User user) {
+        client = cllient;
+        System.out.println(client + "In upload GUI");
         this.user = user;
         setTitle("Upload Artwork");
         setSize(800, 600);

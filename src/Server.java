@@ -77,15 +77,18 @@ public class Server {
                 sendMessage(clientMessage);
         } else if(clientMessage.substring(0, 6).equalsIgnoreCase("ADDART")){
             clientMessage = clientMessage.substring(6);
-            splitString = clientMessage.split(",");
+            splitString = clientMessage.split("%");
             Art added = new Art();
-            added.setName(splitString[1]);
-            added.setArtTime(splitString[2]);
-            added.setArtUser(splitString[3]);
-            added.setArtLocation(splitString[4]);
+            added.setName(splitString[0]);
+            added.setArtTime(splitString[1]);
+            added.setArtUser(splitString[2]);
+            added.setArtLocation(splitString[3]);
+            added.setArtFile(splitString[4]);
             added.setArtDescription(splitString[5]);
-            arts.add(added);
-
+            arts.addy(added);
+        } else if (clientMessage.equalsIgnoreCase("EXIT")){
+            arts.saveFile();
+            users.saveFile();
         }
     }
 

@@ -1,7 +1,7 @@
 public interface Database {
     public abstract void populate();
     // populate the database from the file
-    public abstract void add(Object a);
+    public abstract void addy(Object a);
     // add object into database
     public abstract void subtract(Object a);
     // remove object from database
