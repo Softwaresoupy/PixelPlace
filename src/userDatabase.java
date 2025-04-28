@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class userDatabase extends Database{
+public class userDatabase implements Database{
     File userFile;
     ArrayList<User> userArray;
 
@@ -19,16 +19,21 @@ public class userDatabase extends Database{
             int id = 0;
                 while (userObjectString != null) {
 
-                    String[] splitArtDesc = userObjectString.split("%*'");
+                    String[] splitArtDesc = userObjectString.split("%");
                     String username = splitArtDesc[0];
                     String password = splitArtDesc[1];
                     String email = splitArtDesc[2];
                     User newUser = new User(username, password, email);
-                    userObjectString = br.readLine();
+                    System.out.println(username);
+                    System.out.println(password);
+                    System.out.println(email);
+                    /*userObjectString = br.readLine();
                     newUser.setUploadedArtworksString(userObjectString.split(","));
                     userObjectString = br.readLine();
                     newUser.setFollowingString(userObjectString.split(","));
+                     */
                     userArray.add(newUser);
+                    userObjectString = br.readLine();
                 }
                 stringToObjectMatch();
         } catch (IOException e) {
@@ -44,10 +49,19 @@ public class userDatabase extends Database{
         saveFile();
     }
 
+    public String loginSearch(String userName, String password){
+        for (User u : userArray){
+            if (u.getUsername().equalsIgnoreCase(userName) && u.getPassword().equalsIgnoreCase(password)){
+                return u.toString();
+            }
+        }
+        return ","; // return error
+    }
+
     public void subtract(Object a) {
         boolean removed = userArray.remove((User) a);
         if(!removed){
-            System.out.println("Something went wrong. User " + a.toString().split("'*%")[0] + " not found");
+            System.out.println("Something went wrong. User " + a.toString().split("%")[0] + " not found");
         }
     }
 

@@ -3,25 +3,19 @@
 import javax.swing.*;
 
 public class ArtGallery {
-    /*public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            showLoginGUI();
-        });
-    }
-     */
+    Client client;
+    LoginGUI loginGUI;
 
-    public void showLoginGUI() {
-        LoginGUI loginGUI = new LoginGUI();
+    public ArtGallery(Client client){
+        this.client = client;
+    }
+
+    public void showLoginGUI(Client client) {
+        loginGUI = new LoginGUI(client);
         loginGUI.setLoginListener(new LoginGUI.LoginListener() {
             @Override
             public void onLogin(String username, String password) {
-                // if login is correct then
-                JOptionPane.showMessageDialog(loginGUI, "Login succeed: " + username);
-                loginGUI.dispose();
-                showArtGalleryGUI();
-
-                //else
-                JOptionPane.showMessageDialog(loginGUI, "Username and password combination not found!");
+                client.sendMessage("LOGIN"+username+","+password);
             }
             
             @Override
@@ -33,15 +27,25 @@ public class ArtGallery {
         loginGUI.setVisible(true);
     }
 
-    public void showArtGalleryGUI() {
-        User testUser = new User("Test", "123", "test@pixelgallery.com");
-        
-        testUser.uploadArtwork(new Artwork("Sun", testUser));
-        testUser.uploadArtwork(new Artwork("Moon", testUser));
-        
-        ArtGalleryGUI galleryGUI = new ArtGalleryGUI(testUser);
+    public void correctLogin(String userInfo){
+        JOptionPane.showMessageDialog(loginGUI, "Login successful!");
+        loginGUI.dispose();
+        String[] splitArtDesc = userInfo.split("%");
+        String username = splitArtDesc[0];
+        String password = splitArtDesc[1];
+        String email = splitArtDesc[2];
+        User newUser = new User(username, password, email);
+        showArtGalleryGUI(newUser);
+    }
+
+    public void incorrectLogin(){
+        JOptionPane.showMessageDialog(loginGUI, "Username and password combination not found!");
+    }
+
+    public void showArtGalleryGUI(User user) {
+
+        ArtGalleryGUI galleryGUI = new ArtGalleryGUI(user, client);
         galleryGUI.setVisible(true);
-        
         galleryGUI.setLocationRelativeTo(null);
     }
 }

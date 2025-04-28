@@ -1,13 +1,20 @@
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     int port;
     String ipAddress;
     User currentUser;
+    OutputStream outStream;
+    PrintWriter pw;
+    Socket s;
+
+    // All the GUIs associated with it
     ArtGallery loginGraphicUI;
+
+    Scanner in;
     public Client(String ip, int port){
         ipAddress = ip;
         this.port = port;
@@ -15,27 +22,52 @@ public class Client {
 
     public void startClient(){
         try {
-            Socket s = new Socket(ipAddress, port);
-            PrintWriter out = new PrintWriter(s.getOutputStream(), true);
-            try {
-                OutputStream outStream = s.getOutputStream();
-            }
-            finally{
-                s.close();
-            }
+            s = new Socket(ipAddress, port);
+            pw = new PrintWriter(s.getOutputStream(), true);
+            outStream = s.getOutputStream();
+            in = new Scanner(s.getInputStream());
+            new Thread(() -> {
+                receiveMessage();
+            }).start();
         }
-        catch(IOException ioexc){
+        catch(Exception ioexc){
             ioexc.printStackTrace();
         }
     }
 
+    public void sendMessage(String message){
+        System.out.println("Sending message '" + message + "'");
+        pw.println(message);
+    }
+
+    public void receiveMessage(){
+        String serverMessage;
+        try{
+            while(in.hasNextLine()){
+                serverMessage = in.nextLine();
+                System.out.println("using message '" + serverMessage + "'");
+                useMessage(serverMessage);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void useMessage(String message){
+        if (message.equalsIgnoreCase("loginI"))
+            loginGraphicUI.incorrectLogin();
+        else {
+            loginGraphicUI.correctLogin(message);
+        }
+    }
+
     public void login(){
-        ArtGallery ag = new ArtGallery();
-        ag.showLoginGUI();
+        loginGraphicUI = new ArtGallery(this);
+        loginGraphicUI.showLoginGUI(this);
     }
 
     public static void main(String args[]){
-        Client client = new Client("127.0.0.1", 8189);
+        Client client = new Client("127.0.0.1", 8190);
         client.startClient();
         client.login();
 

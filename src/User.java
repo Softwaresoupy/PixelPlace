@@ -55,7 +55,7 @@ public class User implements Serializable {
     }
 
     public String toString() {
-        String userString = username + "'*%" + password + "'*%" + email + "'*%";
+        String userString = username + "%" + password + "%" + email + "%";
         return userString;
     }
 }

@@ -159,7 +159,8 @@ public class CanvasGUI extends javax.swing.JFrame {
         drawingCanvas.setEraserSelected(true);
     }                                         
 
-    private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        // start the upload button here
         // TODO add your handling code here:
     }                                       
 

@@ -1,6 +1,4 @@
-import java.io.File;
-
-public abstract class Database {
+public interface Database {
     public abstract void populate();
     // populate the database from the file
     public abstract void add(Object a);

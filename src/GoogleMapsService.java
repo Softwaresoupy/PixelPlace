@@ -54,6 +54,7 @@ public class GoogleMapsService {
         );
     }
 
+
     public static class Place {
         private final String name;
         private final String placeId;
@@ -69,6 +70,10 @@ public class GoogleMapsService {
         @Override
         public String toString() {
             return name + " (" + address + ")";
+        }
+
+        public String getPlaceId() {
+            return placeId;
         }
     }
     

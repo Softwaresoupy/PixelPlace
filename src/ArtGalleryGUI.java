@@ -8,9 +8,11 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
     private JList<Artwork> artworkList;
     private DefaultListModel<Artwork> listModel;
 
-    JButton uploadBtn, paintBtn, createGalleryBtn;
+    private JButton uploadBtn, paintBtn, createGalleryBtn;
+    public static Client client;
 
-    public ArtGalleryGUI(User user) {
+    public ArtGalleryGUI(User user, Client client) {
+        this.client = client;
         this.currentUser = user;
         setTitle("PixelGallery - " + user.getUsername());
         setSize(800, 600);
@@ -22,7 +24,7 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         JToolBar toolBar = new JToolBar();
         toolBar.add(new JLabel("Welcome, " + user.getUsername()));
         toolBar.addSeparator();
-        
+
         uploadBtn = new JButton("Upload Art");
         uploadBtn.addActionListener(this);
         paintBtn = new JButton("Paint");
@@ -32,20 +34,20 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         toolBar.add(uploadBtn);
         toolBar.add(paintBtn);
         toolBar.add(createGalleryBtn);
-        
+
         mainPanel.add(toolBar, BorderLayout.NORTH);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        
+
         listModel = new DefaultListModel<>();
         artworkList = new JList<>(listModel);
         artworkList.setCellRenderer(new ArtworkListRenderer());
         JScrollPane listScrollPane = new JScrollPane(artworkList);
         listScrollPane.setPreferredSize(new Dimension(250, 400));
-        
+
         JPanel detailPanel = new JPanel(new BorderLayout());
         detailPanel.add(new JLabel("Artwork Details", JLabel.CENTER), BorderLayout.NORTH);
-        
+
         splitPane.setLeftComponent(listScrollPane);
         splitPane.setRightComponent(detailPanel);
         mainPanel.add(splitPane, BorderLayout.CENTER);
@@ -55,7 +57,7 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         mainPanel.add(statusPanel, BorderLayout.SOUTH);
 
         add(mainPanel);
-        
+
         loadUserArtworks();
     }
 
@@ -70,7 +72,7 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == uploadBtn)
         {
-            UploadGUI uGUI = new UploadGUI();
+            UploadGUI uGUI = new UploadGUI(client, currentUser);
             uGUI.show();
         }
         if (e.getSource() == paintBtn)
@@ -87,12 +89,12 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         }
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Artwork> list, Artwork artwork, 
+        public Component getListCellRendererComponent(JList<? extends Artwork> list, Artwork artwork,
                 int index, boolean isSelected, boolean cellHasFocus) {
-            
+
             setText(artwork.getTitle());
             setIcon(new ImageIcon(artwork.getThumbnail()));
-            
+
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
@@ -100,28 +102,10 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
             }
-            
+
             return this;
         }
     }
-    
-    
-    public static void main(String[] args) {
-        User testUser = new User("ZiyuCao", "123456", "ziyu@example.com");
-
-      Artwork art1 = new Artwork("Dreamy Sunset", testUser);
-        Artwork art2 = new Artwork("Colorful Night", testUser);
-        Artwork art3 = new Artwork("Mystery Forest", testUser);
-
-        testUser.uploadArtwork(art1);
-        testUser.uploadArtwork(art2);
-        testUser.uploadArtwork(art3);
-
-       SwingUtilities.invokeLater(() -> {
-            ArtGalleryGUI gui = new ArtGalleryGUI(testUser);
-           gui.setVisible(true);
-        });
-    }
-
 
 }
+

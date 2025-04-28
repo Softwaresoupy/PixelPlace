@@ -1,15 +1,14 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class artDatabase extends Database{
+public class artDatabase implements Database{
     File artFile;
     ArrayList<Art> artArray;
 
     public artDatabase(File f){
         artFile = f;
         artArray = new ArrayList<Art>();
-        populate();
+        //populate();
     }
 
     public void populate(){
@@ -20,15 +19,16 @@ public class artDatabase extends Database{
             String artObjectString = br.readLine();
             int id = 0;
             while (artObjectString != null) {
-                Art newArt = new Art(id);
+                Art newArt = new Art();
                 id++;
-                String[] splitArtDesc = artObjectString.split("%*'");
+                String[] splitArtDesc = artObjectString.split("%");
                 newArt.setName(splitArtDesc[1]);
                 newArt.setArtTime(splitArtDesc[2]);
                 newArt.setArtUser(splitArtDesc[3]);
                 newArt.setArtLocation(splitArtDesc[4]);
                 newArt.setArtDescription(splitArtDesc[5]);
                 artArray.add(newArt);
+                artObjectString = br.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -37,6 +37,7 @@ public class artDatabase extends Database{
     public void add(Object a) {
         try {
             artArray.add((Art) a);
+            saveFile();
         } catch (Exception e){
             System.out.println("that's not an art object!");
         }

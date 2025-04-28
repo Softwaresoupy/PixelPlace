@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,14 +11,17 @@ public class Server {
     String ipAddress;
     userDatabase users;
     artDatabase arts;
+    PrintWriter pw;
+    Scanner in;
+
 
     public Server(int port){
         // Start server
         this.port = port;
         this.ipAddress = ipAddress;
-        File f = new File("userDatabaseFile.txt");
+        File f = new File("artFiles/userDatabaseFile.txt");
         users = new userDatabase(f);
-        f = new File("artDatabaseFile.txt");
+        f = new File("artFiles/artDatabaseFile.txt");
         arts = new artDatabase(f);
     }
 
@@ -36,11 +36,22 @@ public class Server {
                 Socket incoming = s.accept(); //accept a connection from a client
                 try
                 {
-                    InputStream inStream = incoming.getInputStream();  // the Input stream handler
-                    OutputStream outStream = incoming.getOutputStream();  // the output stream handler
-
-                    Scanner in = new Scanner(inStream);   //setup of input
-                    PrintWriter out = new PrintWriter(outStream,true);  //sends output
+                    new Thread(() -> {
+                        try {
+                            InputStream inStream = incoming.getInputStream();
+                            OutputStream outStream = incoming.getOutputStream();
+                            in = new Scanner(inStream);
+                            pw = new PrintWriter(outStream, true);
+                            String clientMessage;
+                            while (in.hasNextLine()) {
+                                clientMessage = in.nextLine();
+                                System.out.println("Received: " + clientMessage);
+                                useMessage(clientMessage);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }).start();
                 }
                 catch (Exception exc1){
                     exc1.printStackTrace();
@@ -53,12 +64,46 @@ public class Server {
         }
     }
 
+    public void useMessage(String message) {
+        String clientMessage = message;
+        String [] splitString;
+        if (clientMessage.substring(0, 5).equalsIgnoreCase("LOGIN")) {
+            clientMessage = clientMessage.substring(5);
+            splitString = clientMessage.split(",");
+            clientMessage = users.loginSearch(splitString[0], splitString[1]);
+            if (clientMessage.equals(","))
+                sendMessage("LoginI");
+            else
+                sendMessage(clientMessage);
+        } else if(clientMessage.substring(0, 6).equalsIgnoreCase("ADDART")){
+            clientMessage = clientMessage.substring(6);
+            splitString = clientMessage.split(",");
+            Art added = new Art();
+            added.setName(splitString[1]);
+            added.setArtTime(splitString[2]);
+            added.setArtUser(splitString[3]);
+            added.setArtLocation(splitString[4]);
+            added.setArtDescription(splitString[5]);
+            arts.add(added);
+
+        }
+    }
+
+    public void sendMessage(String message){
+            try {
+                pw.println(message);
+            }catch(Exception exc){
+            exc.printStackTrace();
+        }
+    }
+
+
     public static void main(String[] args){
-        Server s = new Server(8189);
+        Server s = new Server(8190);
         s.startServer();
-        artDatabase mainAD = new artDatabase(new File("artDBFile.txt"));
+        artDatabase mainAD = new artDatabase(new File("artFiles/artDatabaseFile.txt"));
         mainAD.saveFile();
-        userDatabase mainUD = new userDatabase(new File("userDBFile.txt"));
+        userDatabase mainUD = new userDatabase(new File("artFiles/userDatabaseFile.txt"));
         mainUD.saveFile();
     }
 }

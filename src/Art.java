@@ -1,9 +1,9 @@
 public class Art {
-    private int artID;
     private String artName;
     private String artTime;
     private String artUser;
-    private String artLocation; // file path to artwork
+    private String artLocation;
+    private String artFile;
     private String artDescription;
     private String galleryPlaceId;
 
@@ -14,8 +14,15 @@ public class Art {
     public void setGalleryPlaceId(String placeId) {
         this.galleryPlaceId = placeId;
     }
-    public Art(int id){
-        artID = id;
+
+    public Art(){}
+    public Art(String artName, String time, String userName, String artLocation, String artFile, String artDescription){
+        this.artName = artName;
+        artTime = time;
+        artUser = userName;
+        this.artLocation = artLocation;
+        this.artFile = artFile;
+        this.artDescription = artDescription;
     }
     
   public String getArtName() {
@@ -58,8 +65,7 @@ public class Art {
   }
 
   public String toString() {
-        return String.join("%*'", 
-            String.valueOf(artID),
+        return String.join("%",
             artName,
             artTime,
             artUser,

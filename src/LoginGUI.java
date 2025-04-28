@@ -14,13 +14,15 @@ public class LoginGUI extends JFrame {
     private LoginListener loginListener;
 
     private LoginListener registerListener;
+    public Client client;
 
     public interface LoginListener {
         void onLogin(String username, String password);
         void onRegister();
     }
 
-    public LoginGUI(){
+    public LoginGUI(Client client){
+        this.client = client;
         login();
     }
     public void login() {
@@ -128,6 +130,8 @@ public class LoginGUI extends JFrame {
         this.loginListener = listener;
     }
 
+
+
     public void setRegisterListener(LoginListener listener) {
         this.registerListener = listener;
     }
@@ -145,4 +149,5 @@ public class LoginGUI extends JFrame {
             loginListener.onLogin(username, password);
         }
     }
+
 }
