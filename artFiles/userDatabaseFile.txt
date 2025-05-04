@@ -1,2 +1,3 @@
-Hello%123%Hello@123.com
-Bye%123%Bye@123.com
+Hello%123%email%
+Bye%456%email%
+TestUser1%password%email%

@@ -19,9 +19,8 @@ public class ArtGallery {
             }
             
             @Override
-            public void onRegister() {
-                loginGUI.registerGUI();
-                //JOptionPane.showMessageDialog(loginGUI, "To log in...");
+            public void onRegister(String username, String password) {
+                client.sendMessage("REGISTER"+username+","+password);
             }
         });
         loginGUI.setVisible(true);
@@ -40,6 +39,14 @@ public class ArtGallery {
 
     public void incorrectLogin(){
         JOptionPane.showMessageDialog(loginGUI, "Username and password combination not found!");
+    }
+
+    public void incorrectRegister(){
+        JOptionPane.showMessageDialog(loginGUI, "Username already taken!");
+    }
+
+    public void correctRegister(){
+        JOptionPane.showMessageDialog(loginGUI, "Register successful!");
     }
 
     public void showArtGalleryGUI(User user, Client client) {

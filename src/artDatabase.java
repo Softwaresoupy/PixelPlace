@@ -30,7 +30,7 @@ public class artDatabase implements Database{
                 newArt.setArtFile(splitArtDesc[4]);
                 artArray.add(newArt);
                 artObjectString = br.readLine();
-                System.out.println("Art added to array: " + newArt.toString());
+                //System.out.println("Art added to array: " + newArt.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,10 +38,10 @@ public class artDatabase implements Database{
     }
     public void addy(Object a) {
         try {
-            System.out.println("adding to array: " + a.toString());
+            //System.out.println("adding to array: " + a.toString());
             artArray.add((Art) a);
             for(Art aa : artArray){
-                System.out.println(aa);
+                //System.out.println(aa);
             }
             saveFile();
         } catch (Exception e){

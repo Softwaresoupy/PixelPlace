@@ -63,10 +63,14 @@ public class Client {
         }
     }
 
-    public void useMessage(String message){
+    public void useMessage(String message) {
         if (message.equalsIgnoreCase("loginI"))
             loginGraphicUI.incorrectLogin();
-        else {
+        else if (message.equalsIgnoreCase("username already taken!")) {
+            loginGraphicUI.incorrectRegister();
+        } else if (message.equalsIgnoreCase("register success!")){
+            loginGraphicUI.correctRegister();
+        }else {
             loginGraphicUI.correctLogin(message);
         }
     }

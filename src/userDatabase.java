@@ -18,18 +18,13 @@ public class userDatabase implements Database{
             String userObjectString = br.readLine();
             int id = 0;
                 while (userObjectString != null) {
-
                     String[] splitArtDesc = userObjectString.split("%");
                     String username = splitArtDesc[0];
                     String password = splitArtDesc[1];
                     String email = splitArtDesc[2];
                     User newUser = new User(username, password, email);
-                    /*userObjectString = br.readLine();
-                    newUser.setUploadedArtworksString(userObjectString.split(","));
-                    userObjectString = br.readLine();
-                    newUser.setFollowingString(userObjectString.split(","));
-                     */
                     userArray.add(newUser);
+                    System.out.println("User added: " + userObjectString);
                     userObjectString = br.readLine();
                 }
                 stringToObjectMatch();
@@ -43,6 +38,7 @@ public class userDatabase implements Database{
     }
     public void addy(Object a) {
         userArray.add((User) a);
+        System.out.println("Added User to array:" + a.toString());
         saveFile();
     }
 
@@ -50,6 +46,14 @@ public class userDatabase implements Database{
         for (User u : userArray){
             if (u.getUsername().equalsIgnoreCase(userName) && u.getPassword().equalsIgnoreCase(password)){
                 return u.toString();
+            }
+        }
+        return ","; // return error
+    }
+    public String registerSearch(String userName){
+        for (User u : userArray){
+            if (u.getUsername().equalsIgnoreCase(userName)){
+                return "username taken!";
             }
         }
         return ","; // return error
@@ -69,10 +73,10 @@ public class userDatabase implements Database{
             BufferedWriter bw = new BufferedWriter(fw);
             for (User u : userArray){
                 bw.write(u.toString());
-                bw.write(u.getUploadedArtworksString().toString()); //CANT HAVE ,
-                //bw.write(u.getCreatedGalleries().toString());
-                bw.write(u.getFollowingString().toString()); //CANT HAVE ,
+                bw.newLine();
+                System.out.println("saving user to file:" + u.toString());
             }
+            bw.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

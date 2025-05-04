@@ -67,7 +67,7 @@ public class Server {
     public void useMessage(String message) {
         String clientMessage = message;
         String [] splitString;
-        if (clientMessage.substring(0, 5).equalsIgnoreCase("LOGIN")) {
+        if (clientMessage.substring(0  , 5).equalsIgnoreCase("LOGIN")) {
             clientMessage = clientMessage.substring(5);
             splitString = clientMessage.split(",");
             clientMessage = users.loginSearch(splitString[0], splitString[1]);
@@ -75,6 +75,16 @@ public class Server {
                 sendMessage("LoginI");
             else
                 sendMessage(clientMessage);
+        } else if (clientMessage.substring(0, 8).equalsIgnoreCase("REGISTER")){
+            clientMessage = clientMessage.substring(8);
+            splitString = clientMessage.split(",");
+            clientMessage = users.registerSearch(splitString[0]);
+            if (clientMessage.equals(",")) {
+                User user = new User(splitString[0],splitString[1],"email");
+                users.addy(user);
+                sendMessage("register success!");
+            }else
+                sendMessage("username already taken!");
         } else if(clientMessage.substring(0, 6).equalsIgnoreCase("ADDART")){
             clientMessage = clientMessage.substring(6);
             splitString = clientMessage.split("%");
