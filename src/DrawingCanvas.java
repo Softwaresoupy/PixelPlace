@@ -133,9 +133,9 @@ public class DrawingCanvas extends JPanel {
             }
             try {
                 ImageIO.write(image, "png", selectedFile);
-                System.out.println("Drawing saved to: " + selectedFile.getAbsolutePath());
+                //System.out.println("Drawing saved to: " + selectedFile.getAbsolutePath());
             } catch (IOException e) {
-                System.err.println("Error saving image: " + e.getMessage());
+                //System.err.println("Error saving image: " + e.getMessage());
             }
         }
     }

@@ -15,20 +15,23 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 public class UploadGUI extends JFrame implements ActionListener {
     JLabel artImageLabel, mapImageLabel;
     JTextField titleField, descriptionField, locationField;
     JButton uploadButton, findLocationButton, submitButton;
     ImageIcon artImage, mapImage;
+
+    ResourceBundle bundle;
     public static Client client;
     public static User user;
 
-    public UploadGUI(Client cllient, User user) {
-        client = cllient;
-        System.out.println(client + "In upload GUI");
+    public UploadGUI(Client client, User user, ResourceBundle bundle) {
+        this.bundle = bundle;
+        this.client = client;
         this.user = user;
-        setTitle("Upload Artwork");
+        setTitle(bundle.getString("upload.title"));
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -41,13 +44,13 @@ public class UploadGUI extends JFrame implements ActionListener {
         imageSplitPane.setDividerLocation(400);
 
 // Art Image Preview (top)
-        artImageLabel = new JLabel("Image Preview", JLabel.CENTER);
+        artImageLabel = new JLabel(bundle.getString("upload.image_preview"), JLabel.CENTER);
         artImageLabel.setPreferredSize(new Dimension(400, 400));
         artImageLabel.setBorder(BorderFactory.createLineBorder(Color.magenta));
         imageSplitPane.setTopComponent(artImageLabel);
 
 // Map Preview (bottom)
-        mapImageLabel = new JLabel("Map Preview", JLabel.CENTER);
+        mapImageLabel = new JLabel(bundle.getString("upload.map_preview"), JLabel.CENTER);
         mapImageLabel.setPreferredSize(new Dimension(200, 400));
         mapImageLabel.setBorder(BorderFactory.createLineBorder(Color.magenta));
         imageSplitPane.setBottomComponent(mapImageLabel);
@@ -68,16 +71,16 @@ public class UploadGUI extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        formPanel.add(new JLabel("Image Upload:"), gbc);
+        formPanel.add(new JLabel(bundle.getString("upload.image_upload")), gbc);
 
         gbc.gridx = 1;
-        uploadButton = new JButton("File upload");
+        uploadButton = new JButton(bundle.getString("upload.file_upload"));
         uploadButton.addActionListener(this);
         formPanel.add(uploadButton, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
-        formPanel.add(new JLabel("Title:"), gbc);
+        formPanel.add(new JLabel(bundle.getString("upload.title_label")), gbc);
 
         gbc.gridx = 1;
         titleField = new JTextField(20);
@@ -85,7 +88,7 @@ public class UploadGUI extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        formPanel.add(new JLabel("Description:"), gbc);
+        formPanel.add(new JLabel(bundle.getString("upload.description")), gbc);
 
         gbc.gridx = 1;
         descriptionField = new JTextField(20);
@@ -93,27 +96,27 @@ public class UploadGUI extends JFrame implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy++;
-        formPanel.add(new JLabel("Location:"), gbc);
+        formPanel.add(new JLabel(bundle.getString("upload.location")), gbc);
 
         gbc.gridx = 1;
         locationField = new JTextField(15);
         formPanel.add(locationField, gbc);
 
         gbc.gridx = 2;
-        findLocationButton = new JButton("Find");
+        findLocationButton = new JButton(bundle.getString("upload.find"));
         findLocationButton.addActionListener(this);
         formPanel.add(findLocationButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy++;
-        submitButton = new JButton("Submit");
+        submitButton = new JButton(bundle.getString("upload.submit"));
         submitButton.addActionListener(this);
         formPanel.add(submitButton, gbc);
 
         mainSplitPane.setRightComponent(formPanel);
         getContentPane().add(mainSplitPane, BorderLayout.CENTER);
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        statusPanel.add(new JLabel("Ready"));
+        statusPanel.add(new JLabel(bundle.getString("upload.ready")));
         getContentPane().add(statusPanel, BorderLayout.SOUTH);
     }
 
@@ -146,7 +149,7 @@ public class UploadGUI extends JFrame implements ActionListener {
     public void fetchLocationMap() {
         String location = locationField.getText().trim();
         if (location.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a location first.");
+            JOptionPane.showMessageDialog(this, bundle.getString("upload.enter_location"));
             return;
         }
         try {
@@ -162,7 +165,7 @@ public class UploadGUI extends JFrame implements ActionListener {
 
         } catch (IOException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load map image.");
+            JOptionPane.showMessageDialog(this, bundle.getString("upload.failed_map"));
         }
     }
 
@@ -185,7 +188,7 @@ public class UploadGUI extends JFrame implements ActionListener {
         String title = titleField.getText().trim();
         String description = descriptionField.getText().trim();
         if (title.isEmpty() || artImage == null) {
-            JOptionPane.showMessageDialog(this, "Please provide a title and select an image.");
+            JOptionPane.showMessageDialog(this, bundle.getString("upload.provide_title_image"));
             return;
         }
         String filePath = "artFiles/" + title + ".png";
@@ -198,13 +201,13 @@ public class UploadGUI extends JFrame implements ActionListener {
             ImageIO.write(buffered, "png", outputFile);
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to save the artwork image.");
+            JOptionPane.showMessageDialog(this, bundle.getString("upload.failed_save"));
             return;
         }
 
         Art art = new Art (titleField.getText(), "", user.getUsername(), locationField.getText(), filePath, descriptionField.getText());
         client.sendMessage("ADDART" + art.toString());
-        JOptionPane.showMessageDialog(this, "Artwork submitted: " + title);
+        JOptionPane.showMessageDialog(this, bundle.getString("upload.submitted") + title);
         dispose();
     }
 }

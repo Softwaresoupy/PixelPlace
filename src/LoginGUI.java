@@ -6,28 +6,58 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ResourceBundle;
 
-public class LoginGUI extends JFrame {
+public class LoginGUI extends JFrame implements ItemListener {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JPasswordField repasswordField;
+    private JComboBox cbLang;
     private LoginListener loginListener;
 
     private LoginListener registerListener;
     public Client client;
 
+    public ResourceBundle bundle;
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() != ItemEvent.SELECTED) return;
+
+        cbLang.removeItemListener(this);
+
+        if (cbLang.getSelectedItem() == "English") {
+            client.changeLang("English");
+            login();
+        } else if (cbLang.getSelectedItem() == "中文") {
+            client.changeLang("中文");
+            login();
+        }
+
+    }
+
+
     public interface LoginListener {
         void onLogin(String username, String password);
         void onRegister(String username, String password);
+
     }
 
-    public LoginGUI(Client client){
+    public LoginGUI(Client client, ResourceBundle bundle){
         this.client = client;
+        this.bundle = bundle;
+        cbLang = new JComboBox<>();
+        cbLang.addItem("English");
+        cbLang.addItem("中文");
+        cbLang.addItemListener(this);
         login();
     }
     public void login() {
+        this.bundle = client.getLangBundle();
         getContentPane().removeAll(); // ← This clears previous components
-        setTitle("PixelGallery - Login");
+        setTitle(bundle.getString("login.title"));
         setSize(350, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -38,11 +68,11 @@ public class LoginGUI extends JFrame {
 
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        panel.add(new JLabel("PixelGallery Login", JLabel.CENTER), gbc);
+        panel.add(new JLabel(bundle.getString("login.label"), JLabel.CENTER), gbc);
 
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        panel.add(new JLabel("Username:"), gbc);
+        panel.add(new JLabel(bundle.getString("login.user")), gbc);
         
         gbc.gridx = 1;
         usernameField = new JTextField(15);
@@ -50,17 +80,17 @@ public class LoginGUI extends JFrame {
 
         gbc.gridy = 2;
         gbc.gridx = 0;
-        panel.add(new JLabel("Password:"), gbc);
+        panel.add(new JLabel(bundle.getString("login.password")), gbc);
         
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
         panel.add(passwordField, gbc);
         
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton loginBtn = new JButton("Login");
+        JButton loginBtn = new JButton(bundle.getString("login.btnlogin"));
         loginBtn.addActionListener(this::performLogin);
         
-        JButton registerBtn = new JButton("Register");
+        JButton registerBtn = new JButton(bundle.getString("login.btnreg"));
         registerBtn.addActionListener(e -> {
             if (loginListener != null) registerGUI();
         });
@@ -68,10 +98,17 @@ public class LoginGUI extends JFrame {
         buttonPanel.add(loginBtn);
         buttonPanel.add(registerBtn);
 
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         panel.add(buttonPanel, gbc);
+
+        cbLang.addItemListener(this);
+
+        gbc.gridy = 3;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        panel.add(cbLang, gbc);
 
         add(panel);
         repaint();                    // ← Redraws the frame
@@ -82,7 +119,7 @@ public class LoginGUI extends JFrame {
         getContentPane().removeAll(); // ← This clears previous components
         repaint();                    // ← Redraws the frame
         revalidate();
-        setTitle("PixelGallery - Register");
+        setTitle(bundle.getString("register.title"));
         setSize(350, 250);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -90,11 +127,11 @@ public class LoginGUI extends JFrame {
         gbc.gridy = 0;
         gbc.gridwidth = 2;
 
-        panel.add(new JLabel("We're so excited to have you join us!", JLabel.CENTER), gbc);
+        panel.add(new JLabel(bundle.getString("register.label"), JLabel.CENTER), gbc);
 
         gbc.gridy = 1;
         gbc.gridwidth = 1;
-        panel.add(new JLabel("Username:"), gbc);
+        panel.add(new JLabel(bundle.getString("register.username")), gbc);
 
         gbc.gridx = 1;
         usernameField = new JTextField(15);
@@ -102,7 +139,7 @@ public class LoginGUI extends JFrame {
 
         gbc.gridy = 2;
         gbc.gridx = 0;
-        panel.add(new JLabel("Password:"), gbc);
+        panel.add(new JLabel(bundle.getString("register.password")), gbc);
 
         gbc.gridx = 1;
         passwordField = new JPasswordField(15);
@@ -110,7 +147,7 @@ public class LoginGUI extends JFrame {
 
         gbc.gridy = 3;
         gbc.gridx = 0;
-        panel.add(new JLabel("Re-enter Password:"), gbc);
+        panel.add(new JLabel(bundle.getString("register.reenter")), gbc);
 
         gbc.gridx = 1;
         repasswordField = new JPasswordField(15);
@@ -118,10 +155,10 @@ public class LoginGUI extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
-        JButton registerBtn = new JButton("Register");
+        JButton registerBtn = new JButton(bundle.getString("register.btn"));
         registerBtn.addActionListener(this::performRegister);
 
-        JButton back = new JButton("Back to login");
+        JButton back = new JButton(bundle.getString("register.back"));
         back.addActionListener(e -> { login();
         });
 
@@ -151,7 +188,7 @@ public class LoginGUI extends JFrame {
         String password = new String(passwordField.getPassword());
         
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Username and password cannot be empty!");
+            JOptionPane.showMessageDialog(this, bundle.getString("register.error"));
             return;
         }
 
@@ -166,15 +203,15 @@ public class LoginGUI extends JFrame {
         String repassword = new String(repasswordField.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Username and password cannot be empty!");
+            JOptionPane.showMessageDialog(this, bundle.getString("register.error"));
             return;
         }
         if (!password.equalsIgnoreCase(repassword)) {
-            JOptionPane.showMessageDialog(this, "passwords are different.");
+            JOptionPane.showMessageDialog(this, bundle.getString("register.passer"));
             return;
         }
         if(password.contains(",") || username.contains(",") ){
-            JOptionPane.showMessageDialog(this, "Usernames and password cannot contain \",\" character!");
+            JOptionPane.showMessageDialog(this, bundle.getString("register.comma"));
             return;
         }
         if (loginListener != null) {

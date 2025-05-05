@@ -6,7 +6,7 @@
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-
+import java.util.ResourceBundle;
 
 
 /**
@@ -20,8 +20,11 @@ public class CanvasGUI extends javax.swing.JFrame {
      */
     Client client;
     User currentUser;
-    public CanvasGUI(Client client, User user) {
+
+    ResourceBundle bundle;
+    public CanvasGUI(Client client, User user, ResourceBundle bundle) {
         this.client = client;
+        this.bundle = bundle;
         currentUser = user;
         initComponents();
         drawingCanvas = new DrawingCanvas();
@@ -57,16 +60,14 @@ public class CanvasGUI extends javax.swing.JFrame {
         Canvas = new javax.swing.JPanel();
         EraserBtn1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        PenBtn.setText("Pen");
+        PenBtn.setText(bundle.getString("canvas.pen"));
         PenBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PenBtnActionPerformed(evt);
             }
         });
 
-        EraserBtn.setText("Eraser");
+        EraserBtn.setText(bundle.getString("canvas.eraser"));
         EraserBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EraserBtnActionPerformed(evt);
@@ -81,7 +82,7 @@ public class CanvasGUI extends javax.swing.JFrame {
             }
         });
 
-        SaveBtn.setText("Save");
+        SaveBtn.setText(bundle.getString("canvas.save"));
         SaveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SaveBtnActionPerformed(evt);
@@ -99,7 +100,7 @@ public class CanvasGUI extends javax.swing.JFrame {
             .addGap(0, 496, Short.MAX_VALUE)
         );
 
-        EraserBtn1.setText("Erase All");
+        EraserBtn1.setText(bundle.getString("canvas.erase_all"));
         EraserBtn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 EraserBtn1ActionPerformed(evt);
@@ -165,7 +166,7 @@ public class CanvasGUI extends javax.swing.JFrame {
 
     private void SaveBtnActionPerformed(java.awt.event.ActionEvent evt) {
         drawingCanvas.saveDrawing();
-        UploadGUI uGUI = new UploadGUI(client, currentUser);
+        UploadGUI uGUI = new UploadGUI(client, currentUser, bundle);
         uGUI.show();
         // TODO add your handling code here:
     }                                       

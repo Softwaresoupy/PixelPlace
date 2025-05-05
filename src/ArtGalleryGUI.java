@@ -2,12 +2,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
-public class ArtGalleryGUI extends JFrame implements ActionListener {
+public class ArtGalleryGUI extends JFrame implements ActionListener, ItemListener {
     private User currentUser;
     private JList<Art> artList;
     private DefaultListModel<Art> listModel;
@@ -15,11 +19,26 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
     private JButton uploadBtn, paintBtn, createGalleryBtn, exitBtn, reloadBtn;
     public static Client client;
     private JPanel detailPanel;
+    private ResourceBundle bundle;
+    private JComboBox cbLang;
 
-    public ArtGalleryGUI(User user, Client client) {
+    public ArtGalleryGUI(User user, Client client, ResourceBundle bundle) {
         this.client = client;
         this.currentUser = user;
-        setTitle("PixelGallery - " + user.getUsername());
+        this.bundle = bundle;
+        cbLang = new JComboBox<>();
+        cbLang.addItemListener(this);
+        cbLang.addItem("English");
+        cbLang.addItem("中文");
+        artGalleryShow();
+
+    }
+
+    public void artGalleryShow(){
+        getContentPane().removeAll(); // ← This clears previous components
+        this.bundle = client.getLangBundle();
+        System.out.println("YAYYY");
+        setTitle("PixelPlace");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -27,26 +46,29 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         JToolBar toolBar = new JToolBar();
-        toolBar.add(new JLabel("Welcome, " + user.getUsername()));
+        String welcome = bundle.getString("gallery.welcome");
+        toolBar.add(new JLabel(MessageFormat.format(welcome, currentUser.getUsername())));
         toolBar.addSeparator();
 
-        uploadBtn = new JButton("Upload Art");
+        uploadBtn = new JButton(bundle.getString("gallery.upload"));
         uploadBtn.addActionListener(this);
-        paintBtn = new JButton("Paint");
+        paintBtn = new JButton(bundle.getString("gallery.paint"));
         paintBtn.addActionListener(this);
-        createGalleryBtn = new JButton("Create Gallery");
+        createGalleryBtn = new JButton(bundle.getString("gallery.createGal"));
         createGalleryBtn.addActionListener(this);
-        exitBtn = new JButton("Exit");
-        exitBtn.addActionListener(this);
-        reloadBtn = new JButton("Reload");
+        reloadBtn = new JButton(bundle.getString("gallery.reload"));
         reloadBtn.addActionListener(this);
+        exitBtn = new JButton(bundle.getString("gallery.exit"));
+        exitBtn.addActionListener(this);
 
         toolBar.add(uploadBtn);
         toolBar.add(paintBtn);
         toolBar.add(createGalleryBtn);
-        toolBar.add(exitBtn);
         toolBar.add(reloadBtn);
-
+        toolBar.add(exitBtn, BorderLayout.EAST);
+        cbLang.addItemListener(this);
+        toolBar.add(cbLang);
+        toolBar.add(exitBtn);
         mainPanel.add(toolBar, BorderLayout.NORTH);
 
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -59,14 +81,14 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         listScrollPane.setPreferredSize(new Dimension(250, 400));
 
         detailPanel = new JPanel(new BorderLayout());
-        detailPanel.add(new JLabel("Art Details", JLabel.CENTER), BorderLayout.NORTH);
+        detailPanel.add(new JLabel(bundle.getString("gallery.details"), JLabel.CENTER), BorderLayout.NORTH);
 
         splitPane.setLeftComponent(listScrollPane);
         splitPane.setRightComponent(detailPanel);
         mainPanel.add(splitPane, BorderLayout.CENTER);
 
         JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        statusPanel.add(new JLabel("Ready"));
+        statusPanel.add(new JLabel(bundle.getString("gallery.status")));
         mainPanel.add(statusPanel, BorderLayout.SOUTH);
 
         artList.addListSelectionListener(e -> {
@@ -80,17 +102,19 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
 
         add(mainPanel);
         loadUserArt();
+        repaint();                    // ← Redraws the frame
+        revalidate();
     }
 
     private void loadUserArt() {
         listModel.clear();
-        System.out.println("LOADING ART LIST");
+        //System.out.println("LOADING ART LIST");
         File f = new File("artFiles/artDatabaseFile.txt");
         try{
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
             String artObjectString = br.readLine();
-            System.out.println("read line");
+            //System.out.println("read line");
             while (artObjectString != null) {
                 Art newArt = new Art();
                 String[] splitArtDesc = artObjectString.split("%");
@@ -101,11 +125,24 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
                 newArt.setArtDescription(splitArtDesc[5]);
                 newArt.setArtFile(splitArtDesc[4]);
                 listModel.addElement(newArt);
-                System.out.println("new art created: " + newArt.toString());
+                //System.out.println("new art created: " + newArt.toString());
                 artObjectString = br.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() != ItemEvent.SELECTED) return;
+
+        cbLang.removeItemListener(this);
+        if (cbLang.getSelectedItem() == "English"){
+            client.changeLang("English");
+            artGalleryShow();
+        } else if (cbLang.getSelectedItem() == "中文"){
+            client.changeLang("中文");
+            artGalleryShow();
         }
     }
 
@@ -115,7 +152,9 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         JLabel titleLabel = new JLabel(art.getArtName(), JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        JLabel artistLabel = new JLabel("By: " + art.getArtUser() + ", from " + art.getArtLocation(), JLabel.CENTER);
+        String label = bundle.getString("gallery.artist");
+        label = MessageFormat.format(label, currentUser.getUsername());
+        JLabel artistLabel = new JLabel(label + art.getArtLocation(), JLabel.CENTER);
         titleLabel.setFont(new Font("Arial",Font.PLAIN, 14));
 
         ImageIcon fullImage = new ImageIcon(art.getArtFile());
@@ -148,12 +187,12 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == uploadBtn)
         {
-            UploadGUI uGUI = new UploadGUI(client, currentUser);
+            UploadGUI uGUI = new UploadGUI(client, currentUser, bundle);
             uGUI.show();
         }
         if (e.getSource() == paintBtn)
         {
-            CanvasGUI cGui = new CanvasGUI(client, currentUser);
+            CanvasGUI cGui = new CanvasGUI(client, currentUser, bundle);
             cGui.show();
         }
         if (e.getSource() == exitBtn)
@@ -163,7 +202,7 @@ public class ArtGalleryGUI extends JFrame implements ActionListener {
         }
         if (e.getSource() == reloadBtn){
                 dispose(); // close current window
-                new ArtGalleryGUI(currentUser, client).setVisible(true); // open a fresh new one
+                new ArtGalleryGUI(currentUser, client, bundle).setVisible(true); // open a fresh new one
         }
     }
 

@@ -1,6 +1,9 @@
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class Client {
@@ -10,6 +13,8 @@ public class Client {
     OutputStream outStream;
     PrintWriter pw;
     Socket s;
+    Locale en, zh;
+    ResourceBundle bundle;
 
     // All the GUIs associated with it
     ArtGallery loginGraphicUI;
@@ -18,6 +23,9 @@ public class Client {
     public Client(String ip, int port){
         ipAddress = ip;
         this.port = port;
+        en = new Locale("en", "US");
+        zh = new Locale("zh", "CN");
+        bundle = ResourceBundle.getBundle("PixelPlace", Locale.getDefault());
     }
 
     public void startClient(){
@@ -76,8 +84,27 @@ public class Client {
     }
 
     public void login(){
-        loginGraphicUI = new ArtGallery(this);
-        loginGraphicUI.showLoginGUI(this);
+        loginGraphicUI = new ArtGallery(this, bundle);
+        loginGraphicUI.showLoginGUI(this, bundle);
+    }
+
+    public void changeLang(String language){
+        if (language.equalsIgnoreCase("English")){
+            bundle = ResourceBundle.getBundle("PixelPlace", en);
+            loginGraphicUI.changeLangUI(bundle);
+        } else if (language.equalsIgnoreCase("中文")){
+            try {
+                bundle = new PropertyResourceBundle(new InputStreamReader(new FileInputStream("src/PixelPlace_zh.properties"), StandardCharsets.UTF_8));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            loginGraphicUI.changeLangUI(bundle);
+            //System.out.println(bundle);
+        }
+    }
+
+    public ResourceBundle getLangBundle(){
+        return bundle;
     }
 
     public static void main(String args[]){
