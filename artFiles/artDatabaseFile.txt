@@ -6,3 +6,5 @@ Shading tutorial!%%Hello%Purdue%artFiles/Shading tutorial!.png%THought it would 
 SPACE%%Hello%arizona%artFiles/SPACE.png%I like space! Thought the colors were cool.
 Flower for dad%%Hello%Purdue%artFiles/Flower for dad.png%Dads deserve flowers too :D
 le pouisson steve%%TestUser1%tulsa%artFiles/le pouisson steve.png%he got cowboy boots on because he texan
+Typewriter%%TestUser2%Dallas%artFiles/Typewriter.png%Hello Prof Matson!
+For Professor%%TestUser2%New York%artFiles/For Professor.png%Thank you!

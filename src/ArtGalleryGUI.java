@@ -153,7 +153,7 @@ public class ArtGalleryGUI extends JFrame implements ActionListener, ItemListene
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         String label = bundle.getString("gallery.artist");
-        label = MessageFormat.format(label, currentUser.getUsername());
+        label = MessageFormat.format(label, art.getArtUser());
         JLabel artistLabel = new JLabel(label + art.getArtLocation(), JLabel.CENTER);
         titleLabel.setFont(new Font("Arial",Font.PLAIN, 14));
 

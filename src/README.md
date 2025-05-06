@@ -1,6 +1,7 @@
 # PixelPlace
-Project for CNIT 325. 
-## CLASSES:
+Project for CNIT 325.
+
+## General notes:
 **Server**
 <br> This class opens the socket for clients to connect to. It will (therefore) handle all of the input and outputs that must come and be used for the Server. By starting this server the databases are also open so that when the clients connect, all the database are ready to be used. 
 <br> <br> 
